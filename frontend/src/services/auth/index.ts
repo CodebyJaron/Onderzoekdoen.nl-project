@@ -1,26 +1,18 @@
-// src/services/AuthService.ts
-import axios from "axios";
-
-const API_URL = "http://localhost:3000";
-
-interface LoginResponse {
-    token: string;
-    username: string;
-}
+import { postRequest, setToken } from "../http";
+import { LoginResponse } from "./types";
 
 export const login = async (
     username: string,
     password: string
 ): Promise<LoginResponse> => {
     try {
-        const response = await axios.post<LoginResponse>(
-            `${API_URL}/auth/login`,
-            { username, password }
-        );
+        const response = await postRequest("login", { username, password });
 
         if (response.data.token) {
             localStorage.setItem("user", JSON.stringify(response.data));
+            setToken(response.data.token);
         }
+
         return response.data;
     } catch (error) {
         throw error;

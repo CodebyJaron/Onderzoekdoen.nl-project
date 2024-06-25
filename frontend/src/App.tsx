@@ -5,22 +5,20 @@ import {
     Routes,
     Navigate,
 } from "react-router-dom";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
+
+import { routes, RouteType } from "./routes/routes";
 
 const App: React.FC = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route
-                    path="/profile"
-                    element={
-                        <PrivateRoute>
-                            <Profile />
-                        </PrivateRoute>
-                    }
-                />
+                {routes.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.path}
+                        element={<ElementRenderer route={route} />}
+                    />
+                ))}
                 <Route path="*" element={<Navigate replace to="/login" />} />
             </Routes>
         </Router>
@@ -33,9 +31,28 @@ interface PrivateRouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const userItem = localStorage.getItem("user");
-    const user = userItem ? JSON.parse(userItem) : null;
+    const isLoggedIn = !!userItem; // Check if user is logged in
 
-    return user ? children : <Navigate replace to="/login" />;
+    return isLoggedIn ? children : <Navigate replace to="/login" />;
+};
+
+interface ElementRendererProps {
+    route: RouteType;
+}
+
+const ElementRenderer: React.FC<ElementRendererProps> = ({ route }) => {
+    const { component: Component, meta } = route;
+
+    // Check if authentication is required and user is logged in
+    if (meta.auth) {
+        return (
+            <PrivateRoute>
+                <Component />
+            </PrivateRoute>
+        );
+    }
+
+    return <Component />;
 };
 
 export default App;

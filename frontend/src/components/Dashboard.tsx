@@ -1,7 +1,7 @@
 // src/components/Profile.tsx
 import React from "react";
 
-const Profile: React.FC = () => {
+const Dashboard: React.FC = () => {
     const userItem = localStorage.getItem("user");
     const user = userItem ? JSON.parse(userItem) : null;
 
@@ -19,4 +19,4 @@ const Profile: React.FC = () => {
     );
 };
 
-export default Profile;
+export default Dashboard;

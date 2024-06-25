@@ -1,7 +1,7 @@
 // src/components/Login.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/AuthService";
+import { login } from "../services/auth/index";
 import {
     Card,
     CardHeader,
@@ -12,22 +12,33 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
+import { beautifyDate } from "../services/helpers/date";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const { toast } = useToast();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         try {
             await login(username, password);
-            navigate("/profile");
+            toast({
+                title: "Successfully logged in",
+                description: beautifyDate(new Date()),
+            });
+
+            navigate("/dashboard");
         } catch (error) {
-            setErrorMessage("Failed to login");
+            toast({
+                title: "Failed to login",
+                description: beautifyDate(new Date()),
+            });
             console.error(error);
         } finally {
             setLoading(false);
@@ -35,61 +46,49 @@ const Login: React.FC = () => {
     };
 
     return (
-        <Card className="mx-auto max-w-sm">
-            <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold">Login</CardTitle>
-                <CardDescription>
-                    Enter your email and password to login to your account
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input id="password" type="password" required />
-                    </div>
-                    <Button type="submit" className="w-full">
-                        Login
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
-        // <div>
-        //     <h2>Login</h2>
-        //     <form onSubmit={handleLogin}>
-        //         <div>
-        //             <label>Username:</label>
-        //             <input
-        //                 type="text"
-        //                 value={username}
-        //                 onChange={(e) => setUsername(e.target.value)}
-        //             />
-        //         </div>
-        //         <div>
-        //             <label>Password:</label>
-        //             <input
-        //                 type="password"
-        //                 value={password}
-        //                 onChange={(e) => setPassword(e.target.value)}
-        //             />
-        //         </div>
-        //         <div>
-        //             <button type="submit" disabled={loading}>
-        //                 {loading ? "Loading..." : "Login"}
-        //             </button>
-        //         </div>
-        //         {errorMessage && <p className="error">{errorMessage}</p>}
-        //     </form>
-        // </div>
+        <div className="flex items-center justify-center h-screen">
+            <Card className="mx-auto max-w-sm">
+                <CardHeader className="space-y-1">
+                    <CardTitle className="text-2xl font-bold">Login</CardTitle>
+                    <CardDescription>
+                        Enter your username and password to login to your
+                        account
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleLogin}>
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Username</Label>
+                                <Input
+                                    id="username"
+                                    type="username"
+                                    placeholder="test"
+                                    onChange={(e) =>
+                                        setUsername(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <Button type="submit" className="w-full">
+                                Login
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
     );
 };
 
