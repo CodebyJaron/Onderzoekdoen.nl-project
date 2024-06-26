@@ -1,4 +1,3 @@
-// src/components/Login.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/auth/index";
@@ -19,13 +18,11 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false);
 
     const { toast } = useToast();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading(true);
         try {
             await login(username, password);
             toast({
@@ -39,9 +36,6 @@ const Login: React.FC = () => {
                 title: "Failed to login",
                 description: beautifyDate(new Date()),
             });
-            console.error(error);
-        } finally {
-            setLoading(false);
         }
     };
 
