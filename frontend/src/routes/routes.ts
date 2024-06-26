@@ -1,5 +1,5 @@
-import Login from "../components/Login";
-import Dashboard from "../components/Dashboard";
+import Login from "../components/pages/Login";
+import Dashboard from "../components/pages/Dashboard";
 import NotFound from "../components/error/NotFound";
 
 export interface RouteType {

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/auth/index";
+import { login } from "../../services/auth/index";
 import {
     Card,
     CardHeader,
     CardTitle,
     CardDescription,
     CardContent,
-} from "./ui/card";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { useToast } from "./ui/use-toast";
-import { beautifyDate } from "../services/helpers/date";
+} from "../ui/card";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
+import { beautifyDate } from "../../services/helpers/date";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
