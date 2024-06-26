@@ -6,7 +6,10 @@ export const login = async (
     password: string
 ): Promise<LoginResponse> => {
     try {
-        const response = await postRequest("login", { username, password });
+        const response = await postRequest("auth/login", {
+            username,
+            password,
+        });
 
         if (response.data.token) {
             localStorage.setItem("user", JSON.stringify(response.data));
