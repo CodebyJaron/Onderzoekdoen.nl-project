@@ -31,7 +31,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const userItem = localStorage.getItem("user");
-    const isLoggedIn = !!userItem; // Check if user is logged in
+    const isLoggedIn = !!userItem;
 
     return isLoggedIn ? children : <Navigate replace to="/login" />;
 };
@@ -43,7 +43,6 @@ interface ElementRendererProps {
 const ElementRenderer: React.FC<ElementRendererProps> = ({ route }) => {
     const { component: Component, meta } = route;
 
-    // Check if authentication is required and user is logged in
     if (meta.auth) {
         return (
             <PrivateRoute>

@@ -1,3 +1,4 @@
+import { toast } from "../../components/ui/use-toast";
 import type { AxiosRequestConfig } from "axios";
 
 import axios from "axios";
@@ -43,3 +44,16 @@ export const postRequest = (
 export const putRequest = (endpoint: string, data: unknown) =>
     http.put(endpoint, data);
 export const deleteRequest = (endpoint: string) => http.delete(endpoint);
+
+http.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 400) {
+            toast({
+                title: "Something wen't wrong!",
+                description: `${error.response.data.message}`,
+            });
+        }
+        return Promise.reject(error);
+    }
+);

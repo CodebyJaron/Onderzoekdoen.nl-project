@@ -11,7 +11,6 @@ import {
 import { CustomerService } from './customer.service';
 import { Contact, Customer, Interest, Remark } from '@prisma/client';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CreateRemarkDto } from './dto/create-remark.dto';
 import { UpdateRemarkDto } from './dto/update-remark.dto';
 import { CreateInterestDto } from './dto/create-interest.dto';
@@ -19,28 +18,36 @@ import { UpdateInterestDto } from './dto/update-interest.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { JwtAuthGuard } from 'src/guard/auth.guard';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { CustomerEntity } from './entities/customer.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('customers')
+@ApiTags('customers')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
+  @ApiCreatedResponse({ type: CustomerEntity })
   create(@Body() createCustomerDto: CreateCustomerDto): Promise<Customer> {
     return this.customerService.create(createCustomerDto);
   }
 
   @Get()
+  @ApiOkResponse({ type: CustomerEntity, isArray: true })
   findAll(): Promise<Customer[]> {
     return this.customerService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: CustomerEntity })
   findOne(@Param('id') id: string): Promise<Customer | null> {
     return this.customerService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiOkResponse({ type: CustomerEntity })
   update(
     @Param('id') id: string,
     @Body() updateCustomerDto: UpdateCustomerDto,
@@ -49,6 +56,7 @@ export class CustomerController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ type: CustomerEntity })
   remove(@Param('id') id: string): Promise<Customer> {
     return this.customerService.remove(+id);
   }

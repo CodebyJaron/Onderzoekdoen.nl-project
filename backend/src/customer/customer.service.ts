@@ -15,8 +15,32 @@ export class CustomerService {
   constructor(private prisma: PrismaService) {}
 
   async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+    const { companyName, phone, email, remarks, interests, contacts } =
+      createCustomerDto;
+
     return this.prisma.customer.create({
-      data: createCustomerDto,
+      data: {
+        companyName,
+        phone,
+        email,
+        remarks: {
+          create: remarks?.map((remark) => ({ content: remark.content })) || [],
+        },
+        interests: {
+          create:
+            interests?.map((interest) => ({
+              interest: interest.interest,
+              description: interest.description,
+            })) || [],
+        },
+        contacts: {
+          create:
+            contacts?.map((contact) => ({
+              contactDate: contact.contactDate,
+              note: contact.note,
+            })) || [],
+        },
+      },
     });
   }
 

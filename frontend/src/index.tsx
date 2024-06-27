@@ -9,5 +9,6 @@ ReactDOM.render(
         <App />
         <Toaster />
     </React.StrictMode>,
+
     document.getElementById("root")
 );

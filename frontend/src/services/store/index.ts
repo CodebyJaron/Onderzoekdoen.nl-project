@@ -5,60 +5,60 @@ import { New, State, Updatable } from "./types";
 const useStoreModule = <T extends { id: number }>(moduleName: string) => {
     const [state, setState] = useState<State<T>>({});
 
-    const setAll = (items: T[]) => {
-        const newState: State<T> = {};
-        items.forEach((item) => {
-            newState[item.id] = item;
-        });
-        setState(newState);
+    const getters = {
+        all: Object.values(state),
+        byId: (id: number) => state[id],
     };
 
-    const setById = (item: T) => {
-        setState((prevState) => ({ ...prevState, [item.id]: item }));
+    const setters = {
+        setAll: (items: T[]) => {
+            const newState: State<T> = {};
+            items.forEach((item) => {
+                newState[item.id] = item;
+            });
+            setState(newState);
+        },
+
+        setById: (item: T) => {
+            setState((prevState) => ({ ...prevState, [item.id]: item }));
+        },
+
+        deleteById: (id: number) => {
+            setState((prevState) => {
+                const newState = { ...prevState };
+                delete newState[id];
+                return newState;
+            });
+        },
     };
 
-    const deleteById = (id: number) => {
-        setState((prevState) => {
-            const newState = { ...prevState };
-            delete newState[id];
-            return newState;
-        });
-    };
-
-    const getAll = async () => {
-        const { data } = await getRequest(moduleName);
-        if (data) setAll(data);
-    };
-
-    const getById = async (id: number) => {
-        const { data } = await getRequest(`${moduleName}/${id}`);
-        if (data) setById(data);
-    };
-
-    const create = async (newItem: New<T>) => {
-        const { data } = await postRequest(moduleName, newItem);
-        if (data) setById(data);
-    };
-
-    const update = async (id: number, item: Updatable<T>) => {
-        const { data } = await putRequest(`${moduleName}/${id}`, item);
-        if (data) setById(data);
-    };
-
-    const remove = async (id: number) => {
-        await deleteRequest(`${moduleName}/${id}`);
-        deleteById(id);
+    const actions = {
+        getAll: async () => {
+            const { data } = await getRequest(moduleName);
+            if (data) setters.setAll(data);
+        },
+        getById: async (id: number) => {
+            const { data } = await getRequest(`${moduleName}/${id}`);
+            if (data) setters.setById(data);
+        },
+        create: async (newItem: New<T>) => {
+            const { data } = await postRequest(moduleName, newItem);
+            if (data) setters.setById(data);
+        },
+        update: async (id: number, item: Updatable<T>) => {
+            const { data } = await putRequest(`${moduleName}/${id}`, item);
+            if (data) setters.setById(data);
+        },
+        remove: async (id: number) => {
+            await deleteRequest(`${moduleName}/${id}`);
+            setters.deleteById(id);
+        },
     };
 
     return {
-        state,
-        actions: {
-            getAll,
-            getById,
-            create,
-            update,
-            remove,
-        },
+        getters,
+        setters,
+        actions,
     };
 };
 
