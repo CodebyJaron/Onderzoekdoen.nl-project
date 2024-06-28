@@ -72,6 +72,18 @@ export class CustomerService {
   }
 
   async remove(id: number): Promise<Customer> {
+    await this.prisma.remark.deleteMany({
+      where: { customerId: id },
+    });
+
+    await this.prisma.interest.deleteMany({
+      where: { customerId: id },
+    });
+
+    await this.prisma.contact.deleteMany({
+      where: { customerId: id },
+    });
+
     return this.prisma.customer.delete({
       where: { id },
     });
