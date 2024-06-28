@@ -14,6 +14,7 @@ import { Input } from "../../ui/input";
 import { Customer } from "../../../services/store/types";
 import { beautifyDate } from "../../../services/helpers/date";
 import useCustomerStore from "../../../services/store";
+import { TrashIcon } from "lucide-react";
 
 interface CustomerViewDialogProps {
     customerId: number;
@@ -29,6 +30,7 @@ export function CustomerViewDialog({ customerId }: CustomerViewDialogProps) {
     });
     const [newContact, setNewContact] = useState({ contactDate: "", note: "" });
     const [newRemark, setNewRemark] = useState({ content: "" });
+    const [hoveredId, setHoveredId] = useState<number | null>(null); // New state for managing hover status
 
     const fetchCustomerData = async () => {
         const data = await customerStore.actions.customer.fetchById(customerId);
@@ -65,6 +67,21 @@ export function CustomerViewDialog({ customerId }: CustomerViewDialogProps) {
             createdAt: new Date().toISOString(),
         });
         setNewRemark({ content: "" });
+        fetchCustomerData();
+    };
+
+    const handleDeleteInterest = async (id: number) => {
+        await customerStore.actions.interest.remove(id);
+        fetchCustomerData();
+    };
+
+    const handleDeleteContact = async (id: number) => {
+        await customerStore.actions.contact.remove(id);
+        fetchCustomerData();
+    };
+
+    const handleDeleteRemark = async (id: number) => {
+        await customerStore.actions.remark.remove(id);
         fetchCustomerData();
     };
 
@@ -106,10 +123,24 @@ export function CustomerViewDialog({ customerId }: CustomerViewDialogProps) {
                                 {customer.interests.map((interest) => (
                                     <div
                                         key={interest.id}
-                                        className="border p-2 rounded"
+                                        className="border p-2 rounded relative"
+                                        onMouseEnter={() =>
+                                            setHoveredId(interest.id)
+                                        }
+                                        onMouseLeave={() => setHoveredId(null)}
                                     >
                                         <strong>{interest.interest}</strong>:{" "}
                                         {interest.description || "N/A"}
+                                        {hoveredId === interest.id && (
+                                            <TrashIcon
+                                                className="w-5 h-5 text-red-500 absolute top-2 right-2 cursor-pointer"
+                                                onClick={() =>
+                                                    handleDeleteInterest(
+                                                        interest.id
+                                                    )
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 ))}
                                 <div className="border p-2 rounded space-y-2">
@@ -153,12 +184,26 @@ export function CustomerViewDialog({ customerId }: CustomerViewDialogProps) {
                                 {customer.contacts.map((contact) => (
                                     <div
                                         key={contact.id}
-                                        className="border p-2 rounded"
+                                        className="border p-2 rounded relative"
+                                        onMouseEnter={() =>
+                                            setHoveredId(contact.id)
+                                        }
+                                        onMouseLeave={() => setHoveredId(null)}
                                     >
                                         {new Date(
                                             contact.contactDate
                                         ).toLocaleDateString()}{" "}
                                         - {contact.note || "No notes"}
+                                        {hoveredId === contact.id && (
+                                            <TrashIcon
+                                                className="w-5 h-5 text-red-500 absolute top-2 right-2 cursor-pointer"
+                                                onClick={() =>
+                                                    handleDeleteContact(
+                                                        contact.id
+                                                    )
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 ))}
                                 <div className="border p-2 rounded space-y-2">
@@ -201,10 +246,24 @@ export function CustomerViewDialog({ customerId }: CustomerViewDialogProps) {
                                 {customer.remarks.map((remark) => (
                                     <div
                                         key={remark.id}
-                                        className="border p-2 rounded"
+                                        className="border p-2 rounded relative"
+                                        onMouseEnter={() =>
+                                            setHoveredId(remark.id)
+                                        }
+                                        onMouseLeave={() => setHoveredId(null)}
                                     >
                                         {beautifyDate(remark.createdAt)} -{" "}
                                         {remark.content}
+                                        {hoveredId === remark.id && (
+                                            <TrashIcon
+                                                className="w-5 h-5 text-red-500 absolute top-2 right-2 cursor-pointer"
+                                                onClick={() =>
+                                                    handleDeleteRemark(
+                                                        remark.id
+                                                    )
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 ))}
                                 <div className="border p-2 rounded space-y-2">
