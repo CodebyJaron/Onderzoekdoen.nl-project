@@ -1,10 +1,98 @@
 # Onderzoekdoen.nl-project
 
-Certainly! Here's a list of all the routes in your `CustomerController`, along
-with a brief description of what each route does. You can include this in your
-README file to help users understand the API endpoints.
+## Introductie
 
-### Customer Routes
+Dit project is ontwikkeld als 'test' project voor mijn stage. Het bestaat uit
+een backend gebouwd met NestJS en een frontend gebouwd met React. In dit
+document zal ik mijn keuzes voor deze technologieën toelichten en uitleggen hoe
+je het project kunt opzetten en draaien.
+
+## Keuze van Technologieën
+
+### NestJS
+
+Ik heb gekozen voor NestJS omdat ik het leuk vind om nieuwe frameworks te leren.
+NestJS biedt een gestructureerde en makkelijk te begrijpen architectuur die het
+mogelijk maakt om snel productief te zijn. De modulariteit en de ondersteuning
+voor TypeScript maken het een krachtige tool voor backend development.
+
+### React
+
+Voor de frontend heb ik gekozen voor React omdat het een zeer
+gebruiksvriendelijke bibliotheek is voor het ontwerpen van interfaces. Met
+behulp van Shadcn kun je eenvoudig en effectief designen, wat bijdraagt aan een
+prettige gebruikersvriendelijkheid.
+
+## Tijdsbestek
+
+Ik heb in totaal 6 uur en 52 minuten besteed aan dit project, volgens WakaTime.
+(Voor screenshot kan je altijd mailtje sturen.)
+
+## Design en Functionaliteiten
+
+Mijn focus lag voornamelijk op het implementeren van de benodigde
+functionaliteiten en niet zozeer op het verfijnen van het design. Het doel was
+om een werkende applicatie op te leveren met de benodigde functionaliteiten.
+
+## Installatie en Gebruik
+
+Volg de onderstaande stappen om het project te installeren en te runnen.
+
+### Backend (NestJS)
+
+1. Navigeer naar de backend map:
+    ```bash
+    cd backend
+    ```
+2. Installeer de benodigde dependencies:
+    ```bash
+    npm install
+    ```
+3. Start de server:
+    ```bash
+    npm run start
+    ```
+
+De NestJS server draait op [http://localhost:3000](http://localhost:3000).
+
+### Frontend (React)
+
+1. Navigeer naar de frontend map:
+    ```bash
+    cd frontend
+    ```
+2. Installeer de benodigde dependencies:
+    ```bash
+    npm install
+    ```
+3. Start de ontwikkelserver:
+    ```bash
+    npm start
+    ```
+
+De React applicatie draait op [http://localhost:3001](http://localhost:3001).
+
+### Database Seed
+
+Om de database te seeden voor een testgebruikersaccount, voer het volgende
+commando uit in de backend map:
+
+```bash
+npm run seed
+```
+
+Inloggegevens voor het testaccount zijn:
+
+-   **Username:** admin
+-   **Password:** admin
+
+## Conclusie
+
+Bedankt voor het bekijken van mijn stageproject. Ik hoop dat deze Readme
+duidelijk genoeg is om je op weg te helpen. Voor eventuele vragen of
+opmerkingen, aarzel niet om contact op te nemen.
+
+### API Routes
 
 #### Create a Customer
 
