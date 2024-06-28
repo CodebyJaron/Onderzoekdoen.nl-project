@@ -4,7 +4,6 @@ export class CreateInterestDto {
   @IsString()
   interest: string;
 
-  @IsOptional()
   @IsString()
-  description?: string;
+  description: string;
 }

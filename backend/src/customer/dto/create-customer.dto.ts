@@ -15,7 +15,7 @@ class CreateRemarkDto {
   content: string;
 }
 
-class CreateInterestDto {
+export class CreateInterestDto {
   @ApiProperty({ description: 'Interest' })
   @IsString()
   @IsNotEmpty()

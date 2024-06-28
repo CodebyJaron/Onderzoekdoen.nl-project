@@ -5,10 +5,10 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CreateRemarkDto } from './dto/create-remark.dto';
 import { UpdateRemarkDto } from './dto/update-remark.dto';
-import { CreateInterestDto } from './dto/create-interest.dto';
 import { UpdateInterestDto } from './dto/update-interest.dto';
-import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { CreateContactDto } from './dto/create-contact.dto';
+import { CreateInterestDto } from './dto/create-customer.dto';
 
 @Injectable()
 export class CustomerService {
@@ -45,7 +45,9 @@ export class CustomerService {
   }
 
   async findAll(): Promise<Customer[]> {
-    return this.prisma.customer.findMany();
+    return this.prisma.customer.findMany({
+      include: { remarks: true, interests: true, contacts: true },
+    });
   }
 
   async findOne(id: number): Promise<Customer | null> {

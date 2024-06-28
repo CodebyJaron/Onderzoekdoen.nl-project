@@ -5,7 +5,6 @@ import { CustomerModule } from './customer/customer.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { APP_PIPE } from '@nestjs/core';
-
 @Module({
   imports: [CustomerModule, AuthModule, UserModule],
   controllers: [AppController],
