@@ -44,6 +44,7 @@ import { CustomerViewDialog } from "./view-customer";
 import { Dialog } from "../../ui/dialog";
 import useCustomerStore from "../../../services/store";
 import { CustomerDialog } from "./custom-form";
+import { CustomerDeleteAlert } from "./delete-customer";
 
 export const columns: ColumnDef<Customer>[] = [
     {
@@ -118,6 +119,9 @@ export const columns: ColumnDef<Customer>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                             <CustomerViewDialog customerId={customer.id} />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <CustomerDeleteAlert customerId={customer.id} />
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
