@@ -24,6 +24,7 @@ export const login = async (
 
 export const logout = (): void => {
     localStorage.removeItem("user");
+    setToken(null);
 };
 
 export const getCurrentUser = (): LoginResponse | null => {

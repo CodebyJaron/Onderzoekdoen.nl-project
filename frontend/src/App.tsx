@@ -9,11 +9,8 @@ import {
 import { routes, RouteType } from "./routes/routes";
 import { getToken, setToken } from "./services/http";
 
+setToken(getToken());
 const App: React.FC = () => {
-    useEffect(() => {
-        console.log(getToken());
-        setToken(getToken());
-    }, []);
     return (
         <Router>
             <Routes>
