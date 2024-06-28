@@ -37,11 +37,13 @@ import {
     TableHeader,
     TableRow,
 } from "../../ui/table";
-import { CustomerDialog } from "./custom-form";
-import { useCustomerStore } from "../../../services/store/modules/customerStore";
 import { Customer, New } from "../../../services/store/types";
 import { FormModalData } from "../../../types";
 import { toast } from "../../ui/use-toast";
+import { CustomerViewDialog } from "./view-customer";
+import { Dialog } from "../../ui/dialog";
+import useCustomerStore from "../../../services/store";
+import { CustomerDialog } from "./custom-form";
 
 export const columns: ColumnDef<Customer>[] = [
     {
@@ -114,8 +116,9 @@ export const columns: ColumnDef<Customer>[] = [
                             Copy customer ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View details</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <CustomerViewDialog customerId={customer.id} />
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
@@ -123,11 +126,7 @@ export const columns: ColumnDef<Customer>[] = [
     },
 ];
 
-interface CustomerTableProps {
-    customers: Customer[];
-}
-
-export const CustomerTable: React.FC<CustomerTableProps> = ({ customers }) => {
+export const CustomerTable: React.FC = () => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
@@ -135,8 +134,13 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({ customers }) => {
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    // Move useCustomerStore hook to the top level
     const customerStore = useCustomerStore();
+
+    React.useEffect(() => {
+        customerStore.actions.customer.fetchAll();
+    }, []);
+
+    let customers = customerStore.getters.getAllCustomers();
 
     const table = useReactTable({
         data: customers,
@@ -166,7 +170,8 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({ customers }) => {
             interests: [],
             contacts: [],
         };
-        await customerStore.actions.create(newCustomer);
+        await customerStore.actions.customer.create(newCustomer);
+        await customerStore.actions.customer.fetchAll();
 
         toast({
             title: "Customer created",

@@ -22,6 +22,8 @@ export function CustomerDialog({
     onSubmit: (customer: Customer) => void;
     onCancel: () => void;
 }) {
+    const [isOpen, setIsOpen] = useState(false);
+
     const [formState, setFormState] = useState<Customer>({
         id: 0,
         companyName: "",
@@ -59,12 +61,22 @@ export function CustomerDialog({
 
     const handleSubmit = () => {
         onSubmit(formState);
+        setIsOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsOpen(false);
+        onCancel();
+    };
+
+    const handleOpen = () => {
+        setIsOpen(true);
     };
 
     return (
-        <Dialog onOpenChange={onCancel}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button>Create customer</Button>
+                <Button onClick={handleOpen}>Create customer</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -116,7 +128,11 @@ export function CustomerDialog({
                     <Button type="button" onClick={handleSubmit}>
                         Save changes
                     </Button>
-                    <Button type="button" variant="ghost" onClick={onCancel}>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={handleCancel}
+                    >
                         Cancel
                     </Button>
                 </DialogFooter>

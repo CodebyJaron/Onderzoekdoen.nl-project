@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import {
     BrowserRouter as Router,
     Route,
@@ -7,8 +7,13 @@ import {
 } from "react-router-dom";
 
 import { routes, RouteType } from "./routes/routes";
+import { getToken, setToken } from "./services/http";
 
 const App: React.FC = () => {
+    useEffect(() => {
+        console.log(getToken());
+        setToken(getToken());
+    }, []);
     return (
         <Router>
             <Routes>

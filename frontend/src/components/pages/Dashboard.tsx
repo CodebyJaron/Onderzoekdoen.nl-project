@@ -1,24 +1,3 @@
-// import React from "react";
-
-// const Dashboard: React.FC = () => {
-//     const userItem = localStorage.getItem("user");
-//     const user = userItem ? JSON.parse(userItem) : null;
-
-//     return (
-//         <div>
-//             <h1>Profile Page</h1>
-//             {user ? (
-//                 <div>
-//                     <p>Welcome, {user.username}!</p>
-//                 </div>
-//             ) : (
-//                 <p>No user data found.</p>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default Dashboard;
 import { Button } from "../ui/button";
 import {
     Card,
@@ -37,9 +16,9 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { logout } from "../../services/auth";
-import { useCustomerStore } from "../../services/store/modules/customerStore";
 import { useEffect } from "react";
 import CustomerTable from "../elements/custom/customer-overview";
+import useCustomerStore from "../../services/store";
 
 export default function Dashboard() {
     const userItem = localStorage.getItem("user");
@@ -50,10 +29,10 @@ export default function Dashboard() {
         window.location.href = "/login";
     };
 
-    const customer = useCustomerStore();
+    const customerStore = useCustomerStore();
 
     useEffect(() => {
-        customer.actions.getAll();
+        customerStore.actions.customer.fetchAll();
     }, []);
 
     return (
@@ -94,7 +73,7 @@ export default function Dashboard() {
                         </TabsList>
                     </div>
                     <TabsContent value="customers" className="space-y-4">
-                        <CustomerTable customers={customer.getters.all} />
+                        <CustomerTable />
                     </TabsContent>
                     <TabsContent value="overview" className="space-y-4">
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -118,7 +97,10 @@ export default function Dashboard() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">
-                                        {customer.getters.all.length}
+                                        {
+                                            customerStore.getters.getAllCustomers()
+                                                .length
+                                        }
                                     </div>
                                 </CardContent>
                             </Card>
